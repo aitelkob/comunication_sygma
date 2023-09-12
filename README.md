@@ -1,0 +1,1 @@
+# comunication_sygma
