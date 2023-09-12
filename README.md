@@ -10,7 +10,7 @@ This API provides a damage detection service for images. It uses machine learnin
 All API requests should be made to:
 
 ```
-http://<your-server-ip>:8080/
+http://<your-server-ip>/
 ```
 
 ### Rate Limiting
@@ -28,7 +28,7 @@ The API is rate-limited to 5 requests per minute per IP address.
 #### Example Request
 
 ```bash
-curl -X GET "http://<your-server-ip>:8080/"
+curl -X GET "http://<your-server-ip>/"
 ```
 
 #### Example Response
@@ -49,7 +49,7 @@ Hello, World!
 Using `curl`:
 
 ```bash
-curl -X POST "http://<your-server-ip>:8080/predict" -F "file=@<path-to-image>"
+curl -X POST "http://<your-server-ip>/predict" -F "file=@<path-to-image>"
 ```
 
 Using Python with `requests`:
@@ -58,7 +58,7 @@ Using Python with `requests`:
 import requests
 
 files = {'file': open('<path-to-image>', 'rb')}
-response = requests.post('http://<your-server-ip>:8080/predict', files=files)
+response = requests.post('http://<your-server-ip>/predict', files=files)
 ```
 
 #### Example Response
@@ -87,7 +87,7 @@ response = requests.post('http://<your-server-ip>:8080/predict', files=files)
 
 ```javascript
 async function makePrediction() {
-  const url = 'http://<your-server-ip>:8080/predict';
+  const url = 'http://<your-server-ip>/predict';
   const formData = new FormData();
   
   const inputElement = document.querySelector('#fileInput');
@@ -113,7 +113,7 @@ async function makePrediction() {
 <?php
 $curl = curl_init();
 
-$url = "http://<your-server-ip>:8080/predict";
+$url = "http://<your-server-ip>/predict";
 $filePath = "<path-to-image>";
 
 $cfile = curl_file_create($filePath, 'image/jpeg', 'test_name');
