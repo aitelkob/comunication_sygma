@@ -152,33 +152,72 @@ curl_close($curl);
 Let's assume that you have a file URI that points to the image you want to upload. Here's how you can perform the API call:
 
 ```javascript
-// React Native Fetch API example to call /predict endpoint
-async function makePrediction() {
-  const url = 'http://<your-server-ip>/predict';
-  const fileUri = '<path-to-image>'; // Replace with your file's URI
-  
-  const formData = new FormData();
-  formData.append('file', {
-    uri: fileUri,
-    type: 'image/jpeg', // or 'image/png'
-    name: 'test.jpg' // you can customize this
-  });
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-    body: formData,
-  });
+const DamageDetectionComponent = () => {
+  const [loading, setLoading] = useState(false);
+  const [predictions, setPredictions] = useState(null);
 
-  if (response.ok) {
-    const jsonResponse = await response.json();
-    console.log('Success:', jsonResponse);
-  } else {
-    console.error('Error:', response.status);
-  }
-}
+  const makePrediction = async () => {
+    setLoading(true);
+
+    // Initialize FormData and append the image file
+    let formData = new FormData();
+    formData.append('file', {
+      uri: 'file:///path/to/image.jpg', // replace with actual file path
+      name: 'image.jpg',
+      type: 'image/jpeg',
+    });
+
+    // Fetch API for POST request
+    try {
+      const response = await fetch('http://<your-server-ip>:8080/predict', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        body: formData,
+      });
+
+      // Handle response
+      if (response.ok) {
+        const jsonResponse = await response.json();
+        setPredictions(jsonResponse.predictions);
+      } else {
+        console.error(`Server responded with status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View>
+      <TouchableOpacity onPress={makePrediction}>
+        <Text>Make Prediction</Text>
+      </TouchableOpacity>
+
+      {loading && <ActivityIndicator size="large" color="#0000ff" />}
+
+      {predictions && (
+        <View>
+          <Text>Predictions:</Text>
+          {predictions.map((pred, index) => (
+            <Text key={index}>
+              Label: {pred.label}, Score: {pred.score}
+            </Text>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+};
+
+export default DamageDetectionComponent;
+
 ```
 
 Note that you need to replace `<your-server-ip>` and `<path-to-image>` with the appropriate values.
