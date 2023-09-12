@@ -145,3 +145,40 @@ if (curl_error($curl)) {
 curl_close($curl);
 ?>
 ```
+
+
+### React Native Example using Fetch API
+
+Let's assume that you have a file URI that points to the image you want to upload. Here's how you can perform the API call:
+
+```javascript
+// React Native Fetch API example to call /predict endpoint
+async function makePrediction() {
+  const url = 'http://<your-server-ip>:8080/predict';
+  const fileUri = '<path-to-image>'; // Replace with your file's URI
+  
+  const formData = new FormData();
+  formData.append('file', {
+    uri: fileUri,
+    type: 'image/jpeg', // or 'image/png'
+    name: 'test.jpg' // you can customize this
+  });
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    body: formData,
+  });
+
+  if (response.ok) {
+    const jsonResponse = await response.json();
+    console.log('Success:', jsonResponse);
+  } else {
+    console.error('Error:', response.status);
+  }
+}
+```
+
+Note that you need to replace `<your-server-ip>` and `<path-to-image>` with the appropriate values.
