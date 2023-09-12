@@ -154,7 +154,7 @@ Let's assume that you have a file URI that points to the image you want to uploa
 ```javascript
 // React Native Fetch API example to call /predict endpoint
 async function makePrediction() {
-  const url = 'http://<your-server-ip>:8080/predict';
+  const url = 'http://<your-server-ip>/predict';
   const fileUri = '<path-to-image>'; // Replace with your file's URI
   
   const formData = new FormData();
